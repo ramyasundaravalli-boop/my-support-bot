@@ -1,87 +1,419 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>🛍️ ShopAssist Pro - AI E-commerce Support</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopAssist Pro - E-commerce Support Bot</title>
     <style>
+        /* Main page styles */
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+        }
+        
+        .header {
             text-align: center;
-        }
-        .container {
-            background: rgba(255,255,255,0.1);
-            padding: 40px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-        }
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-        .cta-button {
-            background: #ff6b6b;
             color: white;
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 10px;
-            font-size: 1.2rem;
-            display: inline-block;
-            margin: 20px 0;
+            margin-bottom: 60px;
         }
+        
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
         }
-        .feature {
-            background: rgba(255,255,255,0.2);
+        
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .installation {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        
+        /* Bot Styles */
+        .shopassist-chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .shopassist-chat-widget {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 350px;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            display: none;
+        }
+        
+        .shopassist-chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px 15px 0 0;
+            text-align: center;
+        }
+        
+        .shopassist-chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background: #f8f9fa;
+        }
+        
+        .shopassist-message {
+            margin-bottom: 10px;
+            padding: 12px 16px;
+            border-radius: 18px;
+            max-width: 80%;
+            line-height: 1.4;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        .shopassist-message-bot {
+            background: white;
+            border-bottom-left-radius: 4px;
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .shopassist-message-user {
+            background: #667eea;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+            text-align: right;
+        }
+        
+        .shopassist-chat-input-container {
+            padding: 15px;
+            border-top: 1px solid #e5e7eb;
+            background: white;
+            border-radius: 0 0 15px 15px;
+        }
+        
+        .shopassist-chat-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        .shopassist-chat-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .shopassist-send-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+        
+        .shopassist-send-button:hover {
+            opacity: 0.9;
+        }
+        
+        .shopassist-toggle-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10001;
+        }
+        
+        .shopassist-toggle-button:hover {
+            transform: scale(1.1);
+        }
+        
+        .shopassist-suggestions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .shopassist-suggestion {
+            background: #e5e7eb;
+            padding: 6px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.2s;
+        }
+        
+        .shopassist-suggestion:hover {
+            background: #d1d5db;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
+    <!-- Main Website Content -->
     <div class="container">
-        <h1>🛍️ ShopAssist Pro</h1>
-        <p style="font-size: 1.3rem; margin-bottom: 30px;">
-            AI-Powered Customer Support for E-commerce Stores<br>
-            Reduce support tickets by 80% • 24/7 Service
-        </p>
+        <div class="header">
+            <h1>🛍️ ShopAssist Pro</h1>
+            <p>AI-Powered E-commerce Customer Support Solution</p>
+        </div>
         
         <div class="features">
-            <div class="feature">
-                <h3>📦 Order Tracking</h3>
-                <p>Automated order status updates</p>
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>Smart AI Responses</h3>
+                <p>Automated responses to common customer inquiries about orders, shipping, returns, and products.</p>
             </div>
-            <div class="feature">
-                <h3>🔄 Returns & Refunds</h3>
-                <p>Instant return policy answers</p>
+            
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>Live Chat Interface</h3>
+                <p>Beautiful, responsive chat widget that works on all devices and browsers.</p>
             </div>
-            <div class="feature">
-                <h3>🚚 Shipping Info</h3>
-                <p>Real-time shipping updates</p>
-            </div>
-            <div class="feature">
-                <h3>💬 24/7 Support</h3>
-                <p>Always available for customers</p>
+            
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Easy Integration</h3>
+                <p>One-line installation. No backend required. Works with any e-commerce platform.</p>
             </div>
         </div>
         
-        <h2>💰 Simple Pricing</h2>
-        <p><strong>$49/month</strong> - 14-day free trial</p>
+        <div class="installation">
+            <h2>🚀 Quick Installation</h2>
+            <p>Add this single line of code to your website:</p>
+            
+            <div class="code-block">
+                &lt;script src="https://cdn.jsdelivr.net/gh/ramyasundaravalli-boop/my-support-bot@main/bot.js"&gt;&lt;/script&gt;
+            </div>
+            
+            <p><strong>Or</strong> copy the complete code from this page and include it in your project.</p>
+            
+            <div style="background: #e7f3ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                <h3 style="color: #0066cc; margin-top: 0;">💡 Demo Active</h3>
+                <p>The bot is running on this page! Click the chat button in the bottom-right corner to test it.</p>
+            </div>
+        </div>
         
-        <a href="mailto:you@youremail.com" class="cta-button">
-            🚀 Start Free Trial
-        </a>
-        
-        <p style="margin-top: 30px; opacity: 0.8;">
-            Perfect for Shopify, WooCommerce, BigCommerce stores
-        </p>
+        <div class="feature-card">
+            <h3>📞 Support & Contact</h3>
+            <p>Need help with integration? Have questions about customization?</p>
+            <p>Open the chat widget or contact us at: <strong>support@shopassist.pro</strong></p>
+        </div>
     </div>
+
+    <!-- Bot Widget (included directly in HTML) -->
+    <div class="shopassist-chat-container">
+        <div class="shopassist-chat-widget" id="shopassistChatWidget">
+            <div class="shopassist-chat-header">
+                <h3 style="margin: 0 0 5px 0;">🛍️ ShopAssist Pro</h3>
+                <p style="margin: 0; font-size: 12px; opacity: 0.9;">AI Support Bot • Online</p>
+            </div>
+            
+            <div class="shopassist-chat-messages" id="shopassistChatMessages">
+                <div class="shopassist-message shopassist-message-bot">
+                    👋 Welcome! I'm your AI shopping assistant. I can help with:
+                    <br>• Order tracking
+                    <br>• Returns & refunds  
+                    <br>• Shipping info
+                    <br>• Product questions
+                    <br><br>How can I help you today?
+                </div>
+            </div>
+            
+            <div class="shopassist-chat-input-container">
+                <input type="text" class="shopassist-chat-input" id="shopassistChatInput" 
+                       placeholder="Type your question...">
+                <button class="shopassist-send-button" id="shopassistSendButton">
+                    Send Message
+                </button>
+                <div class="shopassist-suggestions">
+                    <div class="shopassist-suggestion" data-question="Where is my order?">📦 Track Order</div>
+                    <div class="shopassist-suggestion" data-question="What is your return policy?">🔄 Returns</div>
+                    <div class="shopassist-suggestion" data-question="How long does shipping take?">🚚 Shipping</div>
+                    <div class="shopassist-suggestion" data-question="How do I contact support?">👨‍💻 Help</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="shopassist-toggle-button" id="shopassistToggleButton">💬</button>
+
+    <!-- Bot JavaScript (included directly in HTML) -->
+    <script>
+        // ShopAssist Pro Bot - Embedded Version
+        console.log('🛍️ ShopAssist Pro - Starting initialization...');
+
+        if (window.shopAssistLoaded) {
+            console.log('ShopAssist already loaded');
+        } else {
+            window.shopAssistLoaded = true;
+            
+            function initShopAssist() {
+                console.log('🛍️ ShopAssist Pro - Initializing bot...');
+
+                // Chat functions
+                function toggleChat() {
+                    const widget = document.getElementById('shopassistChatWidget');
+                    const currentDisplay = widget.style.display;
+                    widget.style.display = currentDisplay === 'none' || currentDisplay === '' ? 'flex' : 'none';
+                }
+
+                function sendMessage() {
+                    const input = document.getElementById('shopassistChatInput');
+                    const message = input.value.trim();
+                    
+                    if (message) {
+                        addMessage(message, 'user');
+                        input.value = '';
+                        generateResponse(message);
+                    }
+                }
+
+                function quickQuestion(question) {
+                    addMessage(question, 'user');
+                    generateResponse(question);
+                }
+
+                function addMessage(text, sender) {
+                    const messages = document.getElementById('shopassistChatMessages');
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = `shopassist-message shopassist-message-${sender}`;
+                    messageDiv.textContent = text;
+                    messages.appendChild(messageDiv);
+                    messages.scrollTop = messages.scrollHeight;
+                }
+
+                function generateResponse(userMessage) {
+                    setTimeout(() => {
+                        const messageLower = userMessage.toLowerCase();
+                        let response = "I understand you're asking about this. For detailed assistance with orders, returns, or shipping, please contact our support team.";
+                        
+                        if (messageLower.includes('order') || messageLower.includes('track')) {
+                            response = "To check your order status, I'll need your order number (like ORD-1001). You can find it in your confirmation email or account dashboard.";
+                        }
+                        else if (messageLower.includes('return') || messageLower.includes('refund')) {
+                            response = "We offer a 30-day return policy. Items must be unused with original packaging. Start your return in your account or contact support.";
+                        }
+                        else if (messageLower.includes('shipping') || messageLower.includes('delivery')) {
+                            response = "Standard shipping takes 3-7 business days. Express (2-3 days) and overnight options are available at checkout.";
+                        }
+                        else if (messageLower.includes('hello') || messageLower.includes('hi')) {
+                            response = "Hello! 👋 I'm ShopAssist Pro. How can I help you today?";
+                        }
+                        else if (messageLower.includes('thank')) {
+                            response = "You're welcome! 😊 Is there anything else I can help with?";
+                        }
+                        
+                        addMessage(response, 'bot');
+                    }, 1000);
+                }
+
+                // Event listeners
+                document.getElementById('shopassistToggleButton').addEventListener('click', toggleChat);
+                document.getElementById('shopassistSendButton').addEventListener('click', sendMessage);
+                
+                document.getElementById('shopassistChatInput').addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+
+                // Quick question buttons
+                document.querySelectorAll('.shopassist-suggestion').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const question = this.getAttribute('data-question');
+                        quickQuestion(question);
+                    });
+                });
+
+                console.log('✅ ShopAssist Pro loaded successfully!');
+            }
+
+            // Initialize when ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initShopAssist);
+            } else {
+                initShopAssist();
+            }
+        }
+    </script>
 </body>
 </html>
