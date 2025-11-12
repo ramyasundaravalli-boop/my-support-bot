@@ -1,0 +1,2 @@
+# my-support-bot
+AI SUPPORT BOT FOR ECOMMERCE STORES
